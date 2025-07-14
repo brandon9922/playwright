@@ -1,3 +1,4 @@
+using AutomationExercises.Common;
 using Microsoft.Playwright;
 using Microsoft.Playwright.Xunit;
 
@@ -6,11 +7,13 @@ namespace AutomationExercises;
 public class RegisterUserTests: PageTest
 {
     [Fact]
-    public async Task TestCases1_RegisterUser()
+    public async Task TestCase1_RegisterUser()
     { 
-        await Page.GotoAsync("https://automationexercise.com/");
-        await Expect(Page).ToHaveTitleAsync("Automation Exercise");
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Consent" }).ClickAsync();
+        // await Page.GotoAsync("https://automationexercise.com/");
+        // await Expect(Page).ToHaveTitleAsync("Automation Exercise");
+        var mainPage = new MainPage(Page);
+        await mainPage.NavigateToMainAndVerify();
+        
         await Page.GetByRole(AriaRole.Link, new() { Name = "Signup / Login" }).ClickAsync();
         await Expect(Page.GetByText("New User Signup!")).ToBeVisibleAsync();
         //await Page.GetByPlaceholder("Name").FillAsync("brandon");
@@ -44,7 +47,7 @@ public class RegisterUserTests: PageTest
         await Page.GetByLabel("country").SelectOptionAsync("Canada");
         await Page.GetByRole(AriaRole.Textbox, new() { Name = "state"}).FillAsync("California");
         await Page.GetByRole(AriaRole.Textbox, new() { Name = "City"}).FillAsync("Las Vegas");
-        //await Page.GetByRole(AriaRole.Textbox, new() { Name = "City Zipcode"}).FillAsync("90210");
+        //await Page.GetByRole(AriaRole.Textbox, new() { Name = "zipcode"}).FillAsync("90210");
         await Page.Locator("#zipcode").FillAsync("90210");
         await Page.GetByLabel("Mobile Number").FillAsync("+48510743644");
         
