@@ -11,23 +11,14 @@ public class LoginUserTests : PageTest
     {
         var mainPage = new MainPage(Page);
         await mainPage.NavigateToMainAndVerify();
-        
-        //4. Click on 'Signup / Login' button
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Signup / Login" }).ClickAsync();
-        
-        //5. Verify 'Login to your account' is visible
-        await Expect(Page.GetByText("New User Signup!")).ToBeVisibleAsync();
+        await mainPage.GoToLogin();
         
         //6. Enter correct email address and password
-        await Page.Locator("[data-qa='login-email']").FillAsync("k.sarnowska99@gmail.com");
-        await Page.GetByPlaceholder("Password").FillAsync("test123");
-        
-        //7. Click 'login' button
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Login" }).ClickAsync();
+        var loginPage = new LoginPage(Page);
+        await loginPage.Login("k.sarnowska99@gmail.com", "test123");
         
         // 8. Verify that 'Logged in as username' is visible
         await Expect(Page.GetByText("Logged in as Test")).ToBeVisibleAsync();
-        
         
     }
 
@@ -36,22 +27,31 @@ public class LoginUserTests : PageTest
     {
         var mainPage = new MainPage(Page);
         await mainPage.NavigateToMainAndVerify();
-        
-        //4. Click on 'Signup / Login' button
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Signup / Login" }).ClickAsync();
-        
-        //5. Verify 'Login to your account' is visible
-        await Expect(Page.GetByText("New User Signup")).ToBeVisibleAsync();
+        await mainPage.GoToLogin();
         
     //     6. Enter incorrect email address and password
-        await Page.Locator("[data-qa='login-email']").FillAsync("k.sarnowska19@gmail.com");
-        await Page.GetByPlaceholder("Password").FillAsync("test12");
+        var loginPage = new LoginPage(Page);
+        await loginPage.Login("k.sarnowska19@gmail.com", "test12");
         
-    //     7. Click 'login' button
-        await Page.GetByRole(AriaRole.Button, new() { Name = "Login" }).ClickAsync();
         
     //     8. Verify error 'Your email or password is incorrect!' is visible
     await Expect(Page.GetByText("Your email or password is incorrect!")).ToBeVisibleAsync();
+    
+    }
+    
+    [Fact]
+    public async Task TestCase4_LogoutUser()
+    {
+        var mainPage = new MainPage(Page);
+        await mainPage.NavigateToMainAndVerify();
+        await mainPage.GoToLogin();
+        
+        var loginPage = new LoginPage(Page);
+        await loginPage.Login ("k.sarnowska99@gmail.com", "test123");
+        await Expect(Page.GetByText("Logged in as Test")).ToBeVisibleAsync();
+        await Page.GetByText(" Logout").ClickAsync();
+        await Expect(Page.GetByText("Login to your account")).ToBeVisibleAsync();
+        
     }
 }
 

@@ -13,9 +13,8 @@ public class RegisterUserTests: PageTest
         // await Expect(Page).ToHaveTitleAsync("Automation Exercise");
         var mainPage = new MainPage(Page);
         await mainPage.NavigateToMainAndVerify();
+        await mainPage.GoToLogin();
         
-        await Page.GetByRole(AriaRole.Link, new() { Name = "Signup / Login" }).ClickAsync();
-        await Expect(Page.GetByText("New User Signup!")).ToBeVisibleAsync();
         //await Page.GetByPlaceholder("Name").FillAsync("brandon");
         await Page.Locator("[data-qa='signup-name']").FillAsync("brandon");
         await Page.Locator("[data-qa='signup-email']").FillAsync("p.sarnowski99@gmail.com");
